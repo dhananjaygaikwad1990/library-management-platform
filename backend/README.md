@@ -182,6 +182,36 @@ The client selects a book; the service selects its first available physical copy
 - ReDoc: `http://localhost:8000/redoc`
 - OpenAPI JSON: `http://localhost:8000/openapi.json`
 
+## Current AWS EC2 deployment
+
+The deployed FastAPI service runs on an AWS EC2 instance. It is currently exposed to the Vercel frontend through an ngrok HTTPS tunnel:
+
+```text
+Vercel UI
+  → https://aqua-unable-divinity.ngrok-free.dev
+  → ngrok tunnel
+  → FastAPI/Uvicorn on AWS EC2
+  → PostgreSQL
+```
+
+Current public endpoints:
+
+- API base: `https://aqua-unable-divinity.ngrok-free.dev`
+- Swagger UI: `https://aqua-unable-divinity.ngrok-free.dev/docs`
+- ReDoc: `https://aqua-unable-divinity.ngrok-free.dev/redoc`
+- Health check: `https://aqua-unable-divinity.ngrok-free.dev/health`
+
+The frontend is deployed at `https://library-management-platform-2ert-git-main-akgdrive.vercel.app` and uses the ngrok address as `VITE_API_BASE_URL`.
+
+Operational requirements:
+
+- Keep the FastAPI/Uvicorn process running on EC2 using a process manager such as systemd, Supervisor, Docker, or another production runtime.
+- Keep the ngrok agent running and forwarding to the correct local FastAPI port, normally `8000`.
+- Ensure the EC2 security group exposes only the ports actually required by the deployment.
+- Configure backend secrets and `DATABASE_URL` on EC2; do not commit `.env`.
+- Update and redeploy the Vercel frontend whenever the ngrok public URL changes.
+- Prefer a permanent HTTPS domain or load balancer instead of a temporary ngrok tunnel for stable production use.
+
 ## Error responses
 
 Library errors use a consistent structure:

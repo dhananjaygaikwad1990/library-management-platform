@@ -30,6 +30,35 @@ flowchart LR
     Tests --> TestDB[(Isolated SQLite test DB)]
 ```
 
+## Current cloud deployment
+
+The currently deployed application uses this topology:
+
+```mermaid
+flowchart LR
+    Browser[User browser] -->|HTTPS| Vercel[React UI on Vercel]
+    Vercel -->|REST + JWT over HTTPS| Ngrok[ngrok public tunnel]
+    Ngrok -->|Tunnel forwarding| EC2[FastAPI on AWS EC2]
+    EC2 --> Database[(PostgreSQL)]
+```
+
+| Component | Hosting | Current endpoint |
+|---|---|---|
+| Frontend UI | Vercel | `https://library-management-platform-2ert-git-main-akgdrive.vercel.app` |
+| Backend runtime | AWS EC2 | FastAPI/Uvicorn process running on the EC2 instance |
+| Public backend gateway | ngrok tunnel to EC2 | `https://aqua-unable-divinity.ngrok-free.dev` |
+| API documentation | FastAPI through ngrok | `https://aqua-unable-divinity.ngrok-free.dev/docs` |
+
+Vercel is configured with this build-time environment variable:
+
+```env
+VITE_API_BASE_URL=https://aqua-unable-divinity.ngrok-free.dev
+```
+
+The request flow is browser → Vercel UI → ngrok HTTPS endpoint → FastAPI on EC2 → PostgreSQL. For ngrok domains, the frontend automatically sends `ngrok-skip-browser-warning: true` so API traffic reaches FastAPI rather than ngrok's browser-warning response.
+
+The free ngrok tunnel address may change when the tunnel restarts unless a reserved domain is configured. When it changes, update `VITE_API_BASE_URL` in Vercel and redeploy the frontend. For a stable production deployment, expose EC2 through a permanent HTTPS domain, load balancer, or reverse proxy and restrict backend CORS to the production Vercel origin.
+
 ### Application layers
 
 | Layer | Responsibility |
@@ -343,6 +372,7 @@ The protobuf contract is located at `backend/app/grpc/library.proto`.
 - Add a payment/audit ledger if fine clearance represents a real financial transaction.
 - Review browser token-storage requirements for the deployment environment.
 - Place the API behind TLS and a production process manager or container platform.
+- Replace the temporary/free ngrok tunnel with a stable HTTPS domain for long-running production use.
 
 ## License
 

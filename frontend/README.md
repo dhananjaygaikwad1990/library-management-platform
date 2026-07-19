@@ -54,6 +54,17 @@ Recommended Vercel project settings:
 
 The included `vercel.json` rewrites application routes to `index.html`, allowing direct navigation to routes such as `/dashboard`, `/books`, and `/borrow`.
 
+### Current deployed UI
+
+- Hosting: Vercel
+- UI URL: `https://library-management-platform-2ert-git-main-akgdrive.vercel.app`
+- Backend environment value: `VITE_API_BASE_URL=https://aqua-unable-divinity.ngrok-free.dev`
+- Backend location: FastAPI running on AWS EC2 and exposed through the ngrok HTTPS tunnel
+
+Production requests flow from the browser-hosted Vercel application to ngrok, which forwards them to the FastAPI process on EC2. The API client adds ngrok's browser-warning bypass header automatically.
+
+If the ngrok endpoint changes, update the Vercel environment variable for every required environment (Production, Preview, and Development) and trigger a new deployment. Vite environment values are embedded into the JavaScript bundle during the build.
+
 3. Start the development server.
 
 ```bash
