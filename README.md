@@ -250,6 +250,8 @@ VITE_API_BASE_URL=http://localhost:8000
 
 For Vercel, set `VITE_API_BASE_URL` in **Project Settings → Environment Variables** to the deployed HTTPS backend origin, then redeploy. Use `frontend` as the Vercel Root Directory; the included `frontend/vercel.json` provides SPA route rewrites.
 
+Ngrok backend URLs are detected automatically, and the frontend sends the ngrok browser-warning bypass header required for API requests.
+
 Start the UI:
 
 ```bash

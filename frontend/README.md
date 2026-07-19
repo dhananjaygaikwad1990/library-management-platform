@@ -42,6 +42,8 @@ VITE_API_BASE_URL=https://your-backend-domain.example.com
 
 Use the backend origin only—do not add a trailing slash. A trailing slash is normalized if supplied. Because Vite injects `VITE_*` variables at build time, redeploy the frontend after changing the value.
 
+When `VITE_API_BASE_URL` points to an ngrok domain, the API client automatically sends `ngrok-skip-browser-warning: true`. This prevents ngrok's browser-warning/error response from intercepting API calls and appearing as a CORS failure.
+
 Recommended Vercel project settings:
 
 - Root Directory: `frontend`

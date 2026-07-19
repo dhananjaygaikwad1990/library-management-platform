@@ -27,13 +27,17 @@ export function clearToken(): void {
 export async function apiFetch<T>(path: string, options: RequestInit = {}) {
   const session = getToken();
   const headers = new Headers(options.headers ?? {});
+  const requestUrl = `${API_BASE}${path}`;
 
   headers.set('Content-Type', 'application/json');
+  if (/\.ngrok(?:-free)?\.(?:app|dev|io)(?=\/|$)/i.test(API_BASE)) {
+    headers.set('ngrok-skip-browser-warning', 'true');
+  }
   if (session?.accessToken) {
     headers.set('Authorization', `Bearer ${session.accessToken}`);
   }
 
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(requestUrl, {
     ...options,
     headers,
   });
