@@ -104,11 +104,11 @@ Database initialization seeds these development-only accounts:
 | Role | Email | Password |
 |---|---|---|
 | Librarian | `lib1@example.com` | `LibrarianPass1!` |
-| Student | `student1@example.com` | `StudentPass1!` |
+| Member | `member1@example.com` | `MemberPass1!` |
 | Administrator | `admin1@example.com` | `AdminPass1!` |
 | Visitor | `visitor1@example.com` | `VisitorPass1!` |
 
-The administrator seed also has the student role. Replace or remove these credentials in non-development environments.
+Replace or remove these credentials in non-development environments.
 
 ## Authentication
 
@@ -119,8 +119,8 @@ POST /token
 Content-Type: application/json
 
 {
-  "email": "student1@example.com",
-  "password": "StudentPass1!"
+  "email": "member1@example.com",
+  "password": "MemberPass1!"
 }
 ```
 
@@ -130,7 +130,7 @@ Send the returned token to protected endpoints:
 Authorization: Bearer <access_token>
 ```
 
-Roles are `student`, `librarian`, `admin`, and `visitor`.
+Roles are `member`, `librarian`, `admin`, and `visitor`.
 
 ## REST API
 
@@ -147,10 +147,10 @@ Roles are `student`, `librarian`, `admin`, and `visitor`.
 | `POST` | `/copies` | Register a physical copy | Librarian, admin |
 | `GET` | `/members` | List/search members | Librarian, admin |
 | `POST` | `/members` | Create a member | Librarian, admin |
-| `POST` | `/borrow` | Borrow an available copy for the logged-in user | Student, librarian, admin |
-| `GET` | `/me/borrows` | Get the logged-in user's loan history | Student, librarian, admin |
-| `POST` | `/me/borrows/{borrow_id}/return` | Return the user's borrowed copy | Student, librarian, admin |
-| `POST` | `/me/borrows/{borrow_id}/clear-fine` | Clear a returned loan's fine | Student, librarian, admin |
+| `POST` | `/borrow` | Borrow an available copy for the logged-in user | Member, librarian, admin |
+| `GET` | `/me/borrows` | Get the logged-in user's loan history | Member, librarian, admin |
+| `POST` | `/me/borrows/{borrow_id}/return` | Return the user's borrowed copy | Member, librarian, admin |
+| `POST` | `/me/borrows/{borrow_id}/clear-fine` | Clear a returned loan's fine | Member, librarian, admin |
 
 ### Query parameters
 

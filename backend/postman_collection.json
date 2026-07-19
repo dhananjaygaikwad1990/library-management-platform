@@ -41,13 +41,13 @@
       "type": "string"
     },
     {
-      "key": "student_email",
-      "value": "student1@example.com",
+      "key": "member_email",
+      "value": "member1@example.com",
       "type": "string"
     },
     {
-      "key": "student_password",
-      "value": "StudentPass1!",
+      "key": "member_password",
+      "value": "MemberPass1!",
       "type": "string"
     }
   ],

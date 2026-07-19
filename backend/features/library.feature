@@ -76,7 +76,7 @@ Feature: Complete library management workflows
   Scenario: Borrow and return through the authenticated HTTP API
     Given a book titled "The Test Book" with ISBN "ISBN-030" exists
     And the book has a copy "TEST-A" with status "available"
-    And I am logged in through HTTP as "student@example.com" with password "StudentPass1!"
+    And I am logged in through HTTP as "member@example.com" with password "MemberPass1!"
     When I borrow the saved book through HTTP
     Then the HTTP response status is 200
     And my HTTP borrow history contains 1 loan

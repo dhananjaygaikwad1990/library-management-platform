@@ -91,7 +91,7 @@ export default function BorrowPage() {
   };
 
   return (
-    <RoleGuard allowedRoles={['student', 'librarian', 'admin']}>
+    <RoleGuard allowedRoles={['member', 'librarian', 'admin']}>
       <main className="page-shell">
         <section className="page-header">
           <h1>Borrowing</h1>

@@ -124,7 +124,7 @@ def list_members(
 @app.post("/borrow", response_model=BorrowRead)
 def borrow_copy(
     payload: BorrowRequest,
-    current_user=Depends(require_roles("student", "librarian", "admin")),
+    current_user=Depends(require_roles("member", "librarian", "admin")),
 ):
     return service.borrow_copy_for_member_email(
         email=current_user.email,
@@ -134,14 +134,14 @@ def borrow_copy(
 
 
 @app.get("/me/borrows", response_model=list[BorrowHistoryItem])
-def get_my_borrow_history(current_user=Depends(require_roles("student", "librarian", "admin"))):
+def get_my_borrow_history(current_user=Depends(require_roles("member", "librarian", "admin"))):
     return service.get_borrow_history_for_member_email(current_user.email)
 
 
 @app.post("/me/borrows/{borrow_id}/return", response_model=BorrowRead)
 def return_my_borrow(
     borrow_id: int,
-    current_user=Depends(require_roles("student", "librarian", "admin")),
+    current_user=Depends(require_roles("member", "librarian", "admin")),
 ):
     return service.return_borrow_for_member_email(current_user.email, borrow_id)
 
@@ -149,7 +149,7 @@ def return_my_borrow(
 @app.post("/me/borrows/{borrow_id}/clear-fine", response_model=BorrowRead)
 def clear_my_fine(
     borrow_id: int,
-    current_user=Depends(require_roles("student", "librarian", "admin")),
+    current_user=Depends(require_roles("member", "librarian", "admin")),
 ):
     return service.clear_fine_for_member_email(current_user.email, borrow_id)
 

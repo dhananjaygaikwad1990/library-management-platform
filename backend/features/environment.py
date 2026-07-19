@@ -15,18 +15,18 @@ def _seed_auth_data() -> None:
     with SessionLocal() as session:
         roles = {
             name: Role(name=name, description=f"Test {name} role")
-            for name in ("student", "librarian", "admin", "visitor")
+            for name in ("member", "librarian", "admin", "visitor")
         }
         session.add_all(roles.values())
         session.flush()
 
         users = [
             User(
-                email="student@example.com",
-                password_hash=get_password_hash("StudentPass1!"),
-                api_key="student-test-key",
-                full_name="Test Student",
-                roles=[roles["student"]],
+                email="member@example.com",
+                password_hash=get_password_hash("MemberPass1!"),
+                api_key="member-test-key",
+                full_name="Test Member",
+                roles=[roles["member"]],
             ),
             User(
                 email="librarian@example.com",

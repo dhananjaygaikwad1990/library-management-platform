@@ -139,7 +139,7 @@ class LibraryServicer(library_pb2_grpc.LibraryServiceServicer):
             return library_pb2.MemberResponse()
 
     def BorrowCopy(self, request, context):
-        require_grpc_roles(context, "student", "librarian", "admin")
+        require_grpc_roles(context, "member", "librarian", "admin")
         try:
             borrow = service.borrow_copy(
                 request.copy_id,

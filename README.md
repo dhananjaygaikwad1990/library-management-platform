@@ -78,7 +78,7 @@ The free ngrok tunnel address may change when the tunnel restarts unless a reser
 - Email/password login with JWT bearer tokens
 - Role-based API and UI access
 - Protected routes and user-friendly access-denied states
-- Roles: `student`, `librarian`, `admin`, and `visitor`
+- Roles: `member`, `librarian`, `admin`, and `visitor`
 - Account information and sign-out through the UI profile menu
 - Borrow-record ownership checks prevent users from returning another member's loan
 
@@ -146,7 +146,7 @@ The free ngrok tunnel address may change when the tunnel restarts unless a reser
 
 ## Role overview
 
-| Capability | Student | Librarian | Admin | Visitor |
+| Capability | Member | Librarian | Admin | Visitor |
 |---|---:|---:|---:|---:|
 | Browse catalog | Yes | Yes | Yes | Yes |
 | View personal loans | Yes | Yes | Yes | Authenticated view |
@@ -296,7 +296,7 @@ Database initialization creates these development-only users:
 | Role | Email | Password |
 |---|---|---|
 | Librarian | `lib1@example.com` | `LibrarianPass1!` |
-| Student | `student1@example.com` | `StudentPass1!` |
+| Member | `member1@example.com` | `MemberPass1!` |
 | Administrator | `admin1@example.com` | `AdminPass1!` |
 | Visitor | `visitor1@example.com` | `VisitorPass1!` |
 

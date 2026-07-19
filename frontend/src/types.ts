@@ -1,4 +1,4 @@
-export type RoleName = 'admin' | 'librarian' | 'student' | 'visitor';
+export type RoleName = 'admin' | 'librarian' | 'member' | 'visitor';
 
 export interface UserSession {
   accessToken: string;

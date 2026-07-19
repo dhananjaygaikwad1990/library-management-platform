@@ -17,7 +17,7 @@ interface BorrowSummary {
 
 export default function DashboardPage() {
   const session = getSession();
-  const isStudent = session?.roles.includes('student') ?? false;
+  const isMember = session?.roles.includes('member') ?? false;
   const canViewLoans = session !== null;
   const [borrows, setBorrows] = useState<BorrowSummary[]>([]);
   const [loading, setLoading] = useState(false);
@@ -86,7 +86,7 @@ export default function DashboardPage() {
           <p className="eyebrow">Welcome back</p>
           <h1>Library Dashboard</h1>
           <p className="intro">
-            {isStudent
+            {isMember
               ? 'Review your current loans and due dates. Keep your account in good standing by returning books on time.'
               : 'Track library activity, manage resources, and stay on top of key actions for your role.'}
           </p>

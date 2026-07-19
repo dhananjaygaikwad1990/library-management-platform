@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS user_roles (
 INSERT INTO roles (name, description)
 VALUES
   ('librarian', 'Library staff with permissions to manage inventory and members'),
-  ('student', 'Student user with borrowing privileges'),
+  ('member', 'Library member with borrowing privileges'),
   ('admin', 'Administrator with full access to system operations'),
   ('visitor', 'Read-only visitor role for browsing available books')
 ON CONFLICT (name) DO NOTHING;
@@ -46,7 +46,7 @@ ON CONFLICT (name) DO NOTHING;
 INSERT INTO users (email, password_hash, api_key, full_name, is_active)
 VALUES
   ('lib1@example.com', crypt('LibrarianPass1!', gen_salt('bf')), 'lib1-api-key-0001', 'Librarian One', TRUE),
-  ('student1@example.com', crypt('StudentPass1!', gen_salt('bf')), 'student1-api-key-0001', 'Student One', TRUE),
+  ('member1@example.com', crypt('MemberPass1!', gen_salt('bf')), 'member1-api-key-0001', 'Member One', TRUE),
   ('admin1@example.com', crypt('AdminPass1!', gen_salt('bf')), 'admin1-api-key-0001', 'Administrator One', TRUE),
   ('visitor1@example.com', crypt('VisitorPass1!', gen_salt('bf')), 'visitor1-api-key-0001', 'Visitor One', TRUE)
 ON CONFLICT (email) DO UPDATE SET api_key = EXCLUDED.api_key;
@@ -62,8 +62,8 @@ ON CONFLICT DO NOTHING;
 INSERT INTO user_roles (user_id, role_id)
 SELECT u.user_id, r.role_id
 FROM users u
-JOIN roles r ON r.name = 'student'
-WHERE u.email = 'student1@example.com'
+JOIN roles r ON r.name = 'member'
+WHERE u.email = 'member1@example.com'
 ON CONFLICT DO NOTHING;
 
 INSERT INTO user_roles (user_id, role_id)
@@ -80,13 +80,19 @@ JOIN roles r ON r.name = 'visitor'
 WHERE u.email = 'visitor1@example.com'
 ON CONFLICT DO NOTHING;
 
--- Optional extra role assignments
+-- Migrate legacy student assignments to the member role.
 INSERT INTO user_roles (user_id, role_id)
-SELECT u.user_id, r.role_id
-FROM users u
-JOIN roles r ON r.name = 'student'
-WHERE u.email = 'admin1@example.com'
+SELECT ur.user_id, member_role.role_id
+FROM user_roles ur
+JOIN roles legacy_role ON legacy_role.role_id = ur.role_id AND legacy_role.name = 'student'
+CROSS JOIN roles member_role
+WHERE member_role.name = 'member'
 ON CONFLICT DO NOTHING;
+
+DELETE FROM user_roles
+WHERE role_id IN (SELECT role_id FROM roles WHERE name = 'student');
+
+DELETE FROM roles WHERE name = 'student';
 
 -- Example query to verify seeded data
 -- SELECT u.email, r.name AS role_name

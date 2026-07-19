@@ -102,7 +102,7 @@ The backend must be running separately. See `../backend/README.md` for its setup
 | Books | `/books` | Browse the catalog and filtered author titles | Authenticated |
 | Book Copies | `/copies` | Register copies and review availability | Librarian, admin |
 | Members | `/members` | Create and search members | Librarian, admin |
-| Borrow | `/borrow` | Search and borrow an available book | Student, librarian, admin |
+| Borrow | `/borrow` | Search and borrow an available book | Member, librarian, admin |
 
 ## UI workflows
 
