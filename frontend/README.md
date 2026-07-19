@@ -25,10 +25,32 @@ npm install
 Create a `.env` file:
 
 ```env
-VITE_API_BASE=http://localhost:8000
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
 If unset, the UI uses `http://localhost:8000`.
+
+`VITE_API_BASE` remains supported for backward compatibility, but new deployments should use `VITE_API_BASE_URL`.
+
+### Vercel deployment
+
+In the Vercel project settings, add this environment variable for Production, Preview, and Development as needed:
+
+```text
+VITE_API_BASE_URL=https://your-backend-domain.example.com
+```
+
+Use the backend origin only—do not add a trailing slash. A trailing slash is normalized if supplied. Because Vite injects `VITE_*` variables at build time, redeploy the frontend after changing the value.
+
+Recommended Vercel project settings:
+
+- Root Directory: `frontend`
+- Framework Preset: Vite
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Install Command: `npm install`
+
+The included `vercel.json` rewrites application routes to `index.html`, allowing direct navigation to routes such as `/dashboard`, `/books`, and `/borrow`.
 
 3. Start the development server.
 
@@ -142,7 +164,7 @@ Book title  Total: 5  Available: 3
 
 The API helper is in `src/lib/api.ts`. It:
 
-- Reads `VITE_API_BASE`.
+- Reads `VITE_API_BASE_URL`, with backward-compatible fallback to `VITE_API_BASE`.
 - Adds JSON content headers.
 - Adds the stored bearer token.
 - Converts unsuccessful API responses into user-facing errors.

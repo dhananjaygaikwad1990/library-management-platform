@@ -245,8 +245,10 @@ npm install
 The default backend URL is already `http://localhost:8000`. To configure another URL, create `frontend/.env`:
 
 ```env
-VITE_API_BASE=http://localhost:8000
+VITE_API_BASE_URL=http://localhost:8000
 ```
+
+For Vercel, set `VITE_API_BASE_URL` in **Project Settings → Environment Variables** to the deployed HTTPS backend origin, then redeploy. Use `frontend` as the Vercel Root Directory; the included `frontend/vercel.json` provides SPA route rewrites.
 
 Start the UI:
 

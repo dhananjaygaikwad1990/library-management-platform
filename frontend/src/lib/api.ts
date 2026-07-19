@@ -1,6 +1,10 @@
 import { UserSession } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
+const API_BASE = (
+  import.meta.env.VITE_API_BASE_URL ||
+  import.meta.env.VITE_API_BASE ||
+  'http://localhost:8000'
+).replace(/\/+$/, '');
 
 export function setToken(session: UserSession): void {
   localStorage.setItem('library_session', JSON.stringify(session));
