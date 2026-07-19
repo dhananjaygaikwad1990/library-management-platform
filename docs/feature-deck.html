@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Library Management Platform — Feature & API Deck</title>
+  <style>
+    @page { size: 13.333in 7.5in; margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; color: #e8eef8; background: #08101f; }
+    .slide { width: 13.333in; height: 7.5in; padding: .55in .7in; position: relative; overflow: hidden; page-break-after: always; background:
+      radial-gradient(circle at 85% 10%, rgba(56,189,248,.18), transparent 28%),
+      radial-gradient(circle at 10% 90%, rgba(124,58,237,.16), transparent 30%), #0b1426; }
+    .slide:last-child { page-break-after: auto; }
+    h1 { font-size: 38pt; line-height: 1.05; margin: 0 0 .22in; letter-spacing: -.02em; }
+    h2 { font-size: 25pt; margin: 0 0 .25in; color: #f8fafc; }
+    h3 { margin: 0 0 .08in; font-size: 15pt; color: #7dd3fc; }
+    p, li { font-size: 12pt; line-height: 1.42; color: #cbd5e1; }
+    ul { margin: .08in 0 0; padding-left: .24in; }
+    li { margin: .06in 0; }
+    .eyebrow { color: #38bdf8; text-transform: uppercase; letter-spacing: .14em; font-size: 10pt; font-weight: 700; }
+    .subtitle { font-size: 18pt; max-width: 8.8in; color: #a5b4fc; }
+    .footer { position: absolute; bottom: .22in; left: .7in; right: .7in; display: flex; justify-content: space-between; color: #64748b; font-size: 8.5pt; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .22in; }
+    .grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .16in; }
+    .card { border: 1px solid rgba(148,163,184,.18); border-radius: 14px; padding: .18in; background: rgba(15,23,42,.76); }
+    .metric { font-size: 28pt; font-weight: 750; color: #67e8f9; }
+    .flow { display: flex; align-items: stretch; gap: .1in; margin-top: .22in; }
+    .step { flex: 1; padding: .14in; border-radius: 12px; background: #15213a; border-top: 3px solid #38bdf8; font-size: 10.5pt; color: #dbeafe; }
+    .arrow { align-self: center; color: #38bdf8; font-size: 18pt; }
+    table { width: 100%; border-collapse: collapse; font-size: 9.1pt; }
+    th { text-align: left; color: #7dd3fc; background: rgba(30,41,59,.95); }
+    td, th { padding: .075in .09in; border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top; }
+    td { color: #cbd5e1; }
+    code { font-family: Consolas, monospace; color: #bae6fd; }
+    pre { white-space: pre-wrap; background: #050b16; border: 1px solid #263449; border-radius: 10px; padding: .13in; color: #bfdbfe; font: 9pt/1.35 Consolas, monospace; margin: .08in 0; }
+    .screen { width: 100%; max-height: 5.65in; object-fit: contain; object-position: top; border-radius: 12px; border: 1px solid #334155; box-shadow: 0 14px 40px rgba(0,0,0,.35); }
+    .screen-half { width: 100%; height: 4.62in; object-fit: cover; object-position: top; border-radius: 10px; border: 1px solid #334155; }
+    .tag { display: inline-block; border-radius: 999px; padding: .04in .1in; margin: .02in; background: rgba(56,189,248,.12); color: #7dd3fc; font-size: 9pt; }
+    .warn { color: #fcd34d; }
+    .ok { color: #4ade80; }
+    .cover { display: flex; flex-direction: column; justify-content: center; }
+    .cover:after { content: "LIBRARY"; position: absolute; right: -.12in; bottom: .2in; font-size: 78pt; font-weight: 800; color: rgba(148,163,184,.045); letter-spacing: .08em; }
+  </style>
+</head>
+<body>
+  <section class="slide cover">
+    <div class="eyebrow">Product Feature & Swagger API Guide</div>
+    <h1>Library Management<br>Platform</h1>
+    <p class="subtitle">A complete walkthrough of catalog management, copy inventory, member operations, self-service borrowing, returns, overdue fines, availability, security, and API integration.</p>
+    <div style="margin-top:.35in"><span class="tag">React + TypeScript</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">JWT + RBAC</span><span class="tag">gRPC</span><span class="tag">Behave BDD</span></div>
+    <div class="footer"><span>Prepared from the implemented application</span><span>July 2026</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">01 · Executive summary</div><h2>One platform for the complete circulation lifecycle</h2>
+    <div class="grid3">
+      <div class="card"><div class="metric">Catalog</div><p>Authors, books, ISBN metadata, title search, and author-filtered views.</p></div>
+      <div class="card"><div class="metric">Inventory</div><p>Barcode-level physical copies, statuses, total counts, and live availability.</p></div>
+      <div class="card"><div class="metric">Members</div><p>Role-controlled registration, searchable member directory, and account linking.</p></div>
+      <div class="card"><div class="metric">Loans</div><p>Availability-aware borrowing, due dates, personal history, and one-minute refresh.</p></div>
+      <div class="card"><div class="metric">Returns</div><p>Self-service returns that finalize fines and restore copy availability atomically.</p></div>
+      <div class="card"><div class="metric">Security</div><p>JWT bearer tokens, protected endpoints, record ownership, and role authorization.</p></div>
+    </div>
+    <div class="footer"><span>Library Management Platform</span><span>2</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">02 · Architecture</div><h2>Clear separation from user experience to persistence</h2>
+    <div class="flow"><div class="step"><b>React UI</b><br>Protected routes, role guards, autocomplete, dashboards</div><div class="arrow">→</div><div class="step"><b>FastAPI</b><br>OpenAPI contracts, validation, JWT dependencies</div><div class="arrow">→</div><div class="step"><b>Service layer</b><br>Business rules, borrowing, returns, fines</div><div class="arrow">→</div><div class="step"><b>SQLAlchemy</b><br>Transactions and relational models</div><div class="arrow">→</div><div class="step"><b>PostgreSQL</b><br>Catalog, users, roles, loans, inventory</div></div>
+    <div class="grid2" style="margin-top:.3in">
+      <div class="card"><h3>Parallel integration surface</h3><p>gRPC provides service-to-service operations using the protobuf contract in <code>app/grpc/library.proto</code>.</p></div>
+      <div class="card"><h3>Quality boundary</h3><p>Behave scenarios execute against isolated SQLite, protecting development data while validating services and HTTP flows.</p></div>
+    </div>
+    <div class="footer"><span>Architecture overview</span><span>3</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">03 · Roles & access</div><h2>Capabilities follow the responsibility of each role</h2>
+    <table><thead><tr><th>Capability</th><th>Student</th><th>Librarian</th><th>Administrator</th><th>Visitor</th></tr></thead><tbody>
+      <tr><td>Browse books and availability</td><td class="ok">Yes</td><td class="ok">Yes</td><td class="ok">Yes</td><td class="ok">Yes</td></tr>
+      <tr><td>View personal dashboard</td><td class="ok">Yes</td><td class="ok">Yes</td><td class="ok">Yes</td><td>Authenticated view</td></tr>
+      <tr><td>Borrow / return own copies</td><td class="ok">Yes</td><td class="ok">Yes</td><td class="ok">Yes</td><td>No</td></tr>
+      <tr><td>Create authors and books</td><td>No</td><td class="ok">Yes</td><td class="ok">Yes</td><td>No</td></tr>
+      <tr><td>Register copies</td><td>No</td><td class="ok">Yes</td><td class="ok">Yes</td><td>No</td></tr>
+      <tr><td>Create/search members</td><td>No</td><td class="ok">Yes</td><td class="ok">Yes</td><td>No</td></tr>
+    </tbody></table>
+    <div class="card" style="margin-top:.22in"><h3>Identity model</h3><p>REST borrowing never trusts a client-provided member ID. It derives the member from the authenticated email and creates the linked member record on first borrow when required.</p></div>
+    <div class="footer"><span>Role-based access control</span><span>4</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">04 · UI screen</div><h2>Personal dashboard: loans, due dates, returns & fines</h2>
+    <img class="screen" src="ui-screens/dashboard.png" alt="Dashboard UI">
+    <div class="footer"><span>Actual React UI · representative data</span><span>5</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">05 · Circulation workflow</div><h2>Borrowing and returning update every downstream view</h2>
+    <div class="flow"><div class="step">Search title</div><div class="arrow">→</div><div class="step">See available count</div><div class="arrow">→</div><div class="step">Select title</div><div class="arrow">→</div><div class="step">Borrow available copy</div><div class="arrow">→</div><div class="step">Track due date</div><div class="arrow">→</div><div class="step">Return copy</div></div>
+    <div class="grid2" style="margin-top:.3in">
+      <div class="card"><h3>Borrow transaction</h3><ul><li>Validates due date</li><li>Selects first available physical copy</li><li>Creates the borrow record</li><li>Sets copy status to <code>borrowed</code></li></ul></div>
+      <div class="card"><h3>Return transaction</h3><ul><li>Verifies record ownership</li><li>Records today's return date</li><li>Finalizes overdue fine</li><li>Sets copy status to <code>available</code></li></ul></div>
+    </div>
+    <div class="card" style="margin-top:.18in"><h3>Fine rule</h3><p><b>Outstanding fine = overdue days × 1.00.</b> Active overdue fines are calculated dynamically; returned-loan fines stop accruing and can be cleared.</p></div>
+    <div class="footer"><span>Borrow → due → overdue → return → clearance</span><span>6</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">06 · UI screen</div><h2>Borrow by title with inline live availability</h2>
+    <img class="screen" src="ui-screens/borrow.png" alt="Borrow UI">
+    <div class="footer"><span>Zero-availability titles remain visible but disabled</span><span>7</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">07 · UI screens</div><h2>Catalog and author relationships</h2>
+    <div class="grid2"><div><h3>Authors with linked titles</h3><img class="screen-half" src="ui-screens/authors.png" alt="Authors UI"></div><div><h3>Book catalog</h3><img class="screen-half" src="ui-screens/books.png" alt="Books UI"></div></div>
+    <p>The clickable <b>Books (n)</b> relationship opens the catalog filtered by <code>author_id</code>.</p>
+    <div class="footer"><span>Actual React UI · catalog management</span><span>8</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">08 · UI screen</div><h2>Copy registration and availability intelligence</h2>
+    <img class="screen" src="ui-screens/copies.png" alt="Copies UI">
+    <div class="footer"><span>Title autocomplete · status picker · total and available counts</span><span>9</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">09 · UI screen</div><h2>Searchable member operations</h2>
+    <img class="screen" src="ui-screens/members.png" alt="Members UI">
+    <div class="footer"><span>Name/full-name/member-ID search · sticky scrollable table</span><span>10</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">10 · Swagger</div><h2>Interactive API documentation</h2>
+    <div class="grid2">
+      <div class="card"><h3>Swagger UI</h3><p><code>http://localhost:8000/docs</code></p><ul><li>Explore every operation and schema</li><li>Use <b>Authorize</b> with a bearer JWT</li><li>Submit requests and inspect live responses</li><li>Review validation requirements</li></ul></div>
+      <div class="card"><h3>Additional contracts</h3><p><code>/redoc</code> provides reference-oriented documentation.<br><br><code>/openapi.json</code> exposes the machine-readable OpenAPI document for code generation and integrations.</p></div>
+    </div>
+    <div class="flow"><div class="step">1. POST /token</div><div class="arrow">→</div><div class="step">2. Copy access_token</div><div class="arrow">→</div><div class="step">3. Swagger Authorize</div><div class="arrow">→</div><div class="step">4. Execute protected APIs</div></div>
+    <pre>Authorization: Bearer &lt;access_token&gt;</pre>
+    <div class="footer"><span>FastAPI-generated OpenAPI 3 documentation</span><span>11</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">11 · API reference</div><h2>Authentication, authors, books & inventory</h2>
+    <table><thead><tr><th>Method</th><th>Path</th><th>Purpose</th><th>Access / parameters</th></tr></thead><tbody>
+      <tr><td>GET</td><td><code>/health</code></td><td>Service health</td><td>Public</td></tr>
+      <tr><td>POST</td><td><code>/token</code></td><td>Authenticate and return JWT + roles</td><td>Public; email/password body</td></tr>
+      <tr><td>GET</td><td><code>/authors</code></td><td>Alphabetical author list</td><td>Authenticated</td></tr>
+      <tr><td>POST</td><td><code>/authors</code></td><td>Create author</td><td>Librarian/admin</td></tr>
+      <tr><td>GET</td><td><code>/books</code></td><td>List and search catalog</td><td><code>search</code>, <code>author_id</code></td></tr>
+      <tr><td>POST</td><td><code>/books</code></td><td>Create bibliographic record</td><td>Librarian/admin</td></tr>
+      <tr><td>GET</td><td><code>/books/{book_id}</code></td><td>Get one book</td><td>Authenticated</td></tr>
+      <tr><td>GET</td><td><code>/books/availability</code></td><td>Total and available copies per title</td><td>Optional <code>search</code></td></tr>
+      <tr><td>POST</td><td><code>/copies</code></td><td>Create barcode-level copy</td><td>Librarian/admin</td></tr>
+    </tbody></table>
+    <div class="footer"><span>Swagger API reference · catalog and inventory</span><span>12</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">12 · API reference</div><h2>Members, borrowing, returns & fines</h2>
+    <table><thead><tr><th>Method</th><th>Path</th><th>Purpose</th><th>Rules</th></tr></thead><tbody>
+      <tr><td>GET</td><td><code>/members</code></td><td>List/search members</td><td>Librarian/admin; name or exact ID search</td></tr>
+      <tr><td>POST</td><td><code>/members</code></td><td>Create member</td><td>Librarian/admin; unique email</td></tr>
+      <tr><td>POST</td><td><code>/borrow</code></td><td>Borrow by book or copy</td><td>Member comes from authenticated email</td></tr>
+      <tr><td>GET</td><td><code>/me/borrows</code></td><td>Personal loan history</td><td>Includes status, overdue days, fine, title, author</td></tr>
+      <tr><td>POST</td><td><code>/me/borrows/{id}/return</code></td><td>Return owned loan</td><td>Finalizes fine and restores availability</td></tr>
+      <tr><td>POST</td><td><code>/me/borrows/{id}/clear-fine</code></td><td>Clear returned-loan fine</td><td>Loan must be returned and owned by caller</td></tr>
+    </tbody></table>
+    <div class="card" style="margin-top:.22in"><h3>Ownership protection</h3><p>The path ID alone is insufficient. The service filters by both <code>borrow_id</code> and the member resolved from the current token, preventing cross-member return or fine operations.</p></div>
+    <div class="footer"><span>Swagger API reference · circulation</span><span>13</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">13 · Request & response</div><h2>Borrow API in detail</h2>
+    <div class="grid2"><div><h3>Request</h3><pre>POST /borrow
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "book_id": 2,
+  "borrow_date": "2026-07-19",
+  "due_date": "2026-08-02",
+  "remarks": "Optional note"
+}</pre></div><div><h3>Successful response</h3><pre>{
+  "borrow_id": 41,
+  "copy_id": 7,
+  "member_id": 1001,
+  "borrow_date": "2026-07-19",
+  "due_date": "2026-08-02",
+  "return_date": null,
+  "fine_amount": 0,
+  "remarks": "Optional note"
+}</pre></div></div>
+    <ul><li>Use either <code>book_id</code> or <code>copy_id</code>.</li><li><code>member_id</code> is deliberately excluded from the request.</li><li>The service rejects a past due date relative to the borrow date and rejects unavailable inventory.</li></ul>
+    <div class="footer"><span>Detailed endpoint example</span><span>14</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">14 · Schemas & errors</div><h2>Predictable contracts for client applications</h2>
+    <div class="grid2"><div class="card"><h3>Borrow history enrichments</h3><ul><li><code>status</code></li><li><code>overdue_days</code></li><li><code>fine_amount</code></li><li><code>book_title</code></li><li><code>book_author</code></li><li><code>return_date</code></li></ul></div><div><h3>Canonical error</h3><pre>{
+  "error": {
+    "code": "invalid_data",
+    "message": "Due date cannot be before the borrow date",
+    "details": {
+      "borrow_date": "2026-07-19",
+      "due_date": "2026-07-18"
+    }
+  }
+}</pre></div></div>
+    <p><span class="tag">401 unauthenticated</span><span class="tag">403 forbidden</span><span class="tag">404 not found</span><span class="tag">409 conflict</span><span class="tag">422 validation</span></p>
+    <div class="footer"><span>API contracts and failure semantics</span><span>15</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">15 · Data model</div><h2>Relational foundation</h2>
+    <div class="flow"><div class="step"><b>Author</b><br>1 → many</div><div class="arrow">→</div><div class="step"><b>Book</b><br>catalog metadata</div><div class="arrow">→</div><div class="step"><b>BookCopy</b><br>barcode + status</div><div class="arrow">→</div><div class="step"><b>BorrowRecord</b><br>dates + fine</div><div class="arrow">←</div><div class="step"><b>Member</b><br>1 → many loans</div></div>
+    <div class="grid2" style="margin-top:.3in"><div class="card"><h3>Authentication domain</h3><p><code>User ↔ user_roles ↔ Role</code> separates login authorization from library membership while linking them through email in REST self-service workflows.</p></div><div class="card"><h3>Integrity rules</h3><p>Unique user/member emails, ISBNs, API keys, role names, and copy barcodes prevent ambiguous identities and inventory records.</p></div></div>
+    <div class="footer"><span>Core relational model</span><span>16</span></div>
+  </section>
+
+  <section class="slide">
+    <div class="eyebrow">16 · Quality</div><h2>Verified feature coverage</h2>
+    <div class="grid3"><div class="card"><div class="metric">12</div><p>BDD scenarios</p></div><div class="card"><div class="metric">66</div><p>Passing steps</p></div><div class="card"><div class="metric">0</div><p>Failures</p></div></div>
+    <div class="grid2" style="margin-top:.25in"><div class="card"><h3>Covered</h3><p>Catalog search/filter, availability, member search, auto-linking, borrowing validation, overdue fines, returns, clearance, ownership, authentication, RBAC, HTTP flow, conflicts, and missing records.</p></div><div class="card"><h3>Isolation</h3><p>Behave sets <code>TEST_DATABASE_URL</code> to SQLite, recreates test tables, seeds test identities, and never clears the configured development PostgreSQL database.</p></div></div>
+    <pre>cd backend
+behave --no-capture
+
+cd ../frontend
+npm run build</pre>
+    <div class="footer"><span>Verified implementation status</span><span>17</span></div>
+  </section>
+
+  <section class="slide cover">
+    <div class="eyebrow">Summary</div><h1>Ready for library<br>operations</h1>
+    <p class="subtitle">The platform connects discoverable catalog data, real copy availability, secure self-service circulation, and operational member tools through a documented and tested API.</p>
+    <div class="grid3" style="margin-top:.3in"><div class="card"><h3>Explore</h3><p>Swagger: <code>/docs</code></p></div><div class="card"><h3>Integrate</h3><p>OpenAPI: <code>/openapi.json</code></p></div><div class="card"><h3>Verify</h3><p><code>behave --no-capture</code></p></div></div>
+    <div class="footer"><span>Library Management Platform</span><span>18</span></div>
+  </section>
+</body>
+</html>

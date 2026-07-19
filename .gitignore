@@ -1,0 +1,28 @@
+# Python environments and caches
+.venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environment files and secrets
+.env
+*.env
+!.env.example
+
+# Test databases and generated reports
+*.db
+reports/
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/
+
+# Temporary browser/capture artifacts
+docs/edge-profile/
+frontend/capture-ui.mjs
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
