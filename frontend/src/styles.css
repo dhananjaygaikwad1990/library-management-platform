@@ -771,7 +771,9 @@ input {
   color: #cbd5e1;
 }
 
-input {
+input,
+.form-grid select,
+.form-grid textarea {
   width: 100%;
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 14px;
@@ -780,8 +782,36 @@ input {
   color: #e2e8f0;
 }
 
-input:focus {
+input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
   outline: 2px solid rgba(59, 130, 246, 0.35);
+}
+
+.book-create-section {
+  margin-bottom: 1.25rem;
+}
+
+.book-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.book-form-grid .primary-button {
+  justify-self: start;
+}
+
+.form-message {
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #bae6fd;
+}
+
+@media (max-width: 700px) {
+  .book-form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .error-panel {
